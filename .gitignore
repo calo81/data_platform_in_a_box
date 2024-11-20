@@ -1,2 +1,6 @@
 charts/**/*.tgz
 .idea
+.venv
+*.jar
+*.tgz
+__pycache__

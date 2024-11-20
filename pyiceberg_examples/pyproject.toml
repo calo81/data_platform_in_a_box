@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pyiceberg-examples"
+version = "0.1.0"
+description = ""
+authors = ["Carlo Scarioni <carlo.scarioni@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyiceberg = {extras = ["s3fs,hive"], version="^0.7.1"}
+pyarrow = "17.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
