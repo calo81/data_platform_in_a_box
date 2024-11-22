@@ -1,3 +1,41 @@
+kafka:
+  fullnameOverride: kafka-platform
+  sasl:
+    client:
+      users:
+        - user1
+      passwords: "user1"
+  kraft:
+    enabled: false
+  zookeeper:
+    enabled: true
+  controller:
+    replicaCount: 0
+  broker:
+    replicaCount: 3
+  provisioning:
+    enabled: true
+    topics:
+      - name: test_topic
+        partitions: 1
+        replicationFactor: 1
+        config:
+          max.message.bytes: 64000
+          flush.messages: 1
+risingwave:
+  metaStore:
+    sqlite:
+      enabled: true
+      path: /risingwave2.db
+  stateStore:
+    dataDirectory: "the_data2"
+    minio:
+      enabled: true
+      endpoint: data-platform-minio:9000
+      bucket: risingwave
+      authentication:
+        username: awsAccessKeyId
+        password: awsSecretAccessKey
 trino:
   catalogs:
     tpch: |
@@ -254,14 +292,17 @@ nessie:
       # common to all iceberg clients should be included here. They will be passed to all clients on
       # all warehouses as config defaults. These defaults can be overridden on a per-warehouse basis,
       # see below.
-      configDefaults: {}
+      configDefaults: {
+      }
       # io-impl: org.apache.iceberg.hadoop.HadoopFileIO
 
       # -- Iceberg config overrides applicable to all clients and warehouses. Any properties that are
       # common to all iceberg clients should be included here. They will be passed to all clients on
       # all warehouses as config overrides. These overrides can be overridden on a per-warehouse
       # basis, see below.
-      configOverrides: {}
+      configOverrides: {
+
+      }
       # s3.acl: public-read-write
 
       # -- Iceberg warehouses. Each warehouse is a location where Iceberg tables are stored. Each
@@ -279,7 +320,9 @@ nessie:
         configDefaults: {}
         # -- Iceberg config overrides specific to this warehouse. They override any defaults specified
         # above in catalog.iceberg.configOverrides.
-        configOverrides: {}
+        configOverrides: {
+
+        }
       # In rare cases it might be legit to turn off the object-stores readiness check.
       objectStoresHealthCheckEnabled: false
 

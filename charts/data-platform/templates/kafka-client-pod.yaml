@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-client-deployment
+  namespace: data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-client-pod
+  template:
+    metadata:
+      labels:
+        app: kafka-client-pod
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: kafka-client-properties
+      containers:
+      - command:
+        - sleep
+        - infinity
+        image: docker.io/bitnami/kafka:3.5.1-debian-11-r72
+        name: kafka-client
+        resources: {}
+        volumeMounts:
+          - mountPath: /tmp/
+            name: config
+      dnsPolicy: ClusterFirst

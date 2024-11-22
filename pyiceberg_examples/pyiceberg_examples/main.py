@@ -1,6 +1,7 @@
 from pyiceberg.catalog.rest import RestCatalog
 import pyarrow.parquet as pq
 import os
+import pandas as pd
 
 warehouse_path = "/tmp/warehouse"
 catalog = RestCatalog(
@@ -23,3 +24,23 @@ table = catalog.create_table_if_not_exists(
 
 table.overwrite(df)
 print(len(table.scan().to_arrow()))
+
+data = {
+    "k": ["1", "2", "3", "4", "5"],
+    "v1": ["text1", "text2", "text3", "text4", "text5"],
+    "v2": ["value1", "value2", "value3", "value4", "value5"]
+}
+
+df2 = pd.DataFrame(data)
+df2.to_parquet('df2.parquet')
+
+df2 = pq.read_table('df2.parquet')
+
+table = catalog.create_table_if_not_exists(
+    "first_namespace.taxi_dataset_from_kafka_2",
+    schema=df2.schema,
+)
+
+table.overwrite(df2)
+
+
