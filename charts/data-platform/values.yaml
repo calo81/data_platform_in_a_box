@@ -1,3 +1,9 @@
+postgresql:
+  primary:
+    extendedConfiguration: |-
+      wal_level = logical
+  auth:
+    postgresPassword: "hola"
 kafka:
   fullnameOverride: kafka-platform
   sasl:
@@ -23,12 +29,14 @@ kafka:
           max.message.bytes: 64000
           flush.messages: 1
 risingwave:
+  image:
+    tag: nightly-20241204
   metaStore:
     sqlite:
       enabled: true
-      path: /risingwave2.db
+      path: /risingwave6.db
   stateStore:
-    dataDirectory: "the_data2"
+    dataDirectory: "the_data6"
     minio:
       enabled: true
       endpoint: data-platform-minio:9000
@@ -49,6 +57,7 @@ trino:
       iceberg.catalog.type=rest
       iceberg.rest-catalog.uri=http://data-platform-nessie:19120/iceberg
       iceberg.rest-catalog.warehouse=warehouse1
+      iceberg.file-format=parquet
       s3.aws-access-key=awsAccessKeyId
       s3.aws-secret-key=awsSecretAccessKey
       s3.endpoint=http://data-platform-minio:9000

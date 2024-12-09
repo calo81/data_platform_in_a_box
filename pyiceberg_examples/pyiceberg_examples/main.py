@@ -36,11 +36,19 @@ df2.to_parquet('df2.parquet')
 
 df2 = pq.read_table('df2.parquet')
 
-table = catalog.create_table_if_not_exists(
-    "first_namespace.taxi_dataset_from_kafka_2",
-    schema=df2.schema,
-)
+# table = catalog.create_table_if_not_exists(
+#     "first_namespace.taxi_dataset_from_kafka_4",
+#     schema=df2.schema,
+# )
+#
+# table.overwrite(df2)
 
-table.overwrite(df2)
+# table = catalog.load_table("first_namespace.taxi_dataset_from_kafka_4")
+#
+# df = table.scan(
+#     selected_fields=("k", "v1"),
+# ).to_pandas()
+#
+# print(df)
 
 
