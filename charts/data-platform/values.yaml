@@ -64,6 +64,15 @@ trino:
       s3.path-style-access=true
       s3.region=us-west-2
       fs.native-s3.enabled=true
+    iceberg_gcs: |
+      connector.name=iceberg
+      iceberg.catalog.type=rest
+      iceberg.rest-catalog.uri=http://data-platform-nessie:19120/iceberg
+      iceberg.rest-catalog.warehouse=warehouse2
+      iceberg.file-format=parquet
+      gcs.project-id=playground-testing-364317
+      gcs.json-key={ "type": "service_account", "project_id": "playground-testing", "private_key_id": "", "private_key": "-----BEGIN PRIVATE KEY-----\nM }
+      fs.native-gcs.enabled=true
 mongodb:
   image:
     registry: ghcr.io
@@ -332,6 +341,19 @@ nessie:
         configOverrides: {
 
         }
+      - name: warehouse2
+        # -- Location of the warehouse. Required. Used to determine the base location of a table.
+        # Scheme must be either s3 (Amazon S3), gs (Google GCS) or abfs / abfss (Azure ADLS). Storage
+        # properties for each location can be defined below.
+        location: gs://iceberg_tables/
+        # -- Iceberg config defaults specific to this warehouse. They override any defaults specified
+        # above in catalog.iceberg.configDefaults.
+        configDefaults: { }
+        # -- Iceberg config overrides specific to this warehouse. They override any defaults specified
+        # above in catalog.iceberg.configOverrides.
+        configOverrides: {
+
+        }
       # In rare cases it might be legit to turn off the object-stores readiness check.
       objectStoresHealthCheckEnabled: false
 
@@ -508,15 +530,15 @@ nessie:
           clientLibToken: ~
           # -- The authentication type to use. Valid values are: NONE, USER, SERVICE_ACCOUNT,
           # ACCESS_TOKEN, APPLICATION_DEFAULT. The default is NONE.
-          authType: ~
+          authType: SERVICE_ACCOUNT
 
           # -- The Google Cloud service account key secret. This is required when authType is USER or
           # SERVICE_ACCOUNT.
           authCredentialsJsonSecret:
             # -- The secret name to pull a valid Google Cloud service account key from.
-            name: ~
+            name: gcs-service-account-secret
             # -- The secret key storing the Google Cloud service account JSON key.
-            key: ~
+            key: service_account_key
 
           # -- The oauth2 token secret. This is required when authType is ACCESS_TOKEN.
           oauth2TokenSecret:

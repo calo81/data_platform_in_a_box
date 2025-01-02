@@ -11,6 +11,7 @@ pyiceberg = {extras = ["s3fs,hive"], version="^0.7.1"}
 pyarrow = "17.0.0"
 pandas = "^2.2.3"
 avro = "^1.12.0"
+gcsfs = "^2024.10.0"
 
 
 [build-system]

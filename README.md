@@ -404,15 +404,51 @@ WITH (connector = 'iceberg',
 
 ```
 
-# extras
-
 ### Using From BigQuery
 
+I will assume a bucket in gcs named `iceberg_tables`.
+
+A configuration is provided to use Iceberg with GCS storage instead of Minio. Also a Trino configuration to be able to query it from Trino.
+
+Modify the secret [gcs-service-account-secret.yaml](charts/data-platform/templates/gcs-service-account-secret.yaml) with the Service Account Json that you want that is able to create objects in the bucket in GCS
+
+You should have a user that also can write into that bucket. In order to populate it with some stuff from Python.
+
+Locally do `gcloud auth application-default login` and login with that user
+
+Then you can run the file [main_gcs_try.py](pyiceberg_examples/pyiceberg_examples/main_gcs_try.py) which will populate an Iceberg table in GCS.
+
+To query this from BigQuery:
+
+In BigQuery First create an [external connection](https://cloud.google.com/bigquery/docs/create-cloud-resource-connection)
+
+I'll assume next the connection is named `projects/playground-testing-364317/locations/europe-west2/connections/iceberg_meta_2`
+
+In your BigQuery Console do the following (replacing paths as needed)
+
 ```sql
- CREATE EXTERNAL TABLE `iceberg_stuff2.taxi`
+ CREATE EXTERNAL TABLE `iceberg_stuff2.taxi3`
   WITH CONNECTION `projects/playground-testing-364317/locations/europe-west2/connections/iceberg_meta_2`
   OPTIONS (
          format = 'ICEBERG',
-         uris = ["gs://iceberg_tables/1.metadata.json"]
+         uris = ["gs://iceberg_tables/first_namespace_gcs/taxi_dataset_6340ccc3-890c-4875-afd1-798199c60e70/metadata/00000-60c2a882-e50e-4957-8f61-0486d9e46895.metadata.json"]
    )
+```
+
+You can now query that table in BigQuery:
+
+```sql
+SELECT * FROM `playground-testing-364317.iceberg_stuff2.taxi3` LIMIT 1000
+```
+
+**NOTE**: The query part from BigQuery as shown is not extremely great as the metadata file needs to be changed by hand every time. However using the GCS for storing the data and metadata is perfectly fine.
+
+To query the same table from Trino. Again connect to Trino and port forward as we did  before.
+
+But now select the "schema" or "catalog" `iceberg_gcs` and the database `first_namespace_gcs`
+
+You can now query from Trino:
+
+```sql
+select * from "taxi_dataset";
 ```
