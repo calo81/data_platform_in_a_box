@@ -21,7 +21,7 @@ spec:
       - command:
         - sleep
         - infinity
-        image: docker.io/bitnami/kafka:3.5.1-debian-11-r72
+        image: docker.io/bitnamilegacy/kafka:4.0.0-debian-12-r10
         name: kafka-client
         resources: {}
         volumeMounts:
