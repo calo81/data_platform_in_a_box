@@ -1,0 +1,1 @@
+dbt-risingwave>=1.10.0

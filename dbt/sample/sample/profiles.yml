@@ -1,0 +1,12 @@
+sample:
+  outputs:
+    dev:
+      dbname: dev
+      host: localhost
+      password: root
+      port: 4567
+      schema: public
+      threads: 5
+      type: risingwave
+      user: root
+  target: dev

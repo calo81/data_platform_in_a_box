@@ -13,12 +13,12 @@ dependencies:
   version: 10.0.3
 - name: risingwave
   repository: https://risingwavelabs.github.io/helm-charts/
-  version: 0.2.41
+  version: 0.2.44
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 18.1.1
 - name: lakekeeper
   repository: https://lakekeeper.github.io/lakekeeper-charts/
   version: 0.8.0
-digest: sha256:f72c1753b646860bfa1c9c4fcb8341a6f0cb2a2b57a46aade9e0a908cf8e56ba
-generated: "2025-10-25T15:13:43.751034+01:00"
+digest: sha256:f08dccf66ce8a7e60ab01a754f8ec85de3bf51e5b0704af62468c1af0990ffd2
+generated: "2025-12-08T09:43:08.261386Z"
