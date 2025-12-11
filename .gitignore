@@ -4,3 +4,6 @@ charts/**/*.tgz
 *.jar
 *.tgz
 __pycache__
+.DS_Store
+.venv*
+trains.csv

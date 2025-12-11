@@ -7,18 +7,18 @@ warehouse_path = "/tmp/warehouse"
 catalog = RestCatalog(
     "default",
     **{
-        "uri": f"http://localhost:19120/iceberg",
-        "warehouse": "warehouse1",
+        "uri": f"http://localhost:8181/catalog",
+        "warehouse": "warehouse3",
         "s3.access-key-id": "awsAccessKeyId",
         "s3.secret-access-key": "awsSecretAccessKey",
     },
 )
 
-catalog.create_namespace_if_not_exists("first_namespace")
+catalog.create_namespace_if_not_exists("public")
 df = pq.read_table(f"{os.path.dirname(os.path.abspath(__file__))}/../data_samples/taxi_data.parquet")
 
 table = catalog.create_table_if_not_exists(
-    "first_namespace.taxi_dataset",
+    "public.taxi_dataset",
     schema=df.schema,
 )
 
@@ -36,19 +36,19 @@ df2.to_parquet('df2.parquet')
 
 df2 = pq.read_table('df2.parquet')
 
-# table = catalog.create_table_if_not_exists(
-#     "first_namespace.taxi_dataset_from_kafka_4",
-#     schema=df2.schema,
-# )
-#
-# table.overwrite(df2)
+table = catalog.create_table_if_not_exists(
+    "public.taxi_dataset_from_kafka_4",
+    schema=df2.schema,
+)
 
-# table = catalog.load_table("first_namespace.taxi_dataset_from_kafka_4")
-#
-# df = table.scan(
-#     selected_fields=("k", "v1"),
-# ).to_pandas()
-#
-# print(df)
+table.overwrite(df2)
+
+table = catalog.load_table("public.taxi_dataset_from_kafka_4")
+
+df = table.scan(
+    selected_fields=("k", "v1"),
+).to_pandas()
+
+print(df)
 
 

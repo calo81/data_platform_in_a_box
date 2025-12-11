@@ -19,7 +19,7 @@ kafka:
   controller:
     replicaCount: 1
   broker:
-    replicaCount: 3
+    replicaCount: 1
   provisioning:
     enabled: true
     topics:
@@ -29,15 +29,44 @@ kafka:
         config:
           max.message.bytes: 64000
           flush.messages: 1
+      - name: kafka_user_details
+        partitions: 1
+        replicationFactor: 1
+        config:
+          max.message.bytes: 64000
+          flush.messages: 1
+      - name: kafka_user_pay_1
+        partitions: 1
+        replicationFactor: 1
+        config:
+          max.message.bytes: 64000
+          flush.messages: 1
+      - name: kafka_user_pay_2
+        partitions: 1
+        replicationFactor: 1
+        config:
+          max.message.bytes: 64000
+          flush.messages: 1
+      - name: kafka_user_extra_details
+        partitions: 1
+        replicationFactor: 1
+        config:
+          max.message.bytes: 64000
+          flush.messages: 1
 risingwave:
   image:
     tag: v2.6.1
   metaStore:
-    sqlite:
+    postgresql:
       enabled: true
-      path: /risingwave6.db
+      host: data-platform-postgresql
+      port: 5432
+      database: risingwave
+      authentication:
+        username: "postgres"
+        password: "hola"
   stateStore:
-    dataDirectory: "data6"
+    dataDirectory: "data"
     minio:
       enabled: true
       endpoint: data-platform-minio:9000

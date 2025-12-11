@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duckdb-ui-deployment
+  namespace: data
+  labels:
+    app: duckdb-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duckdb-ui
+  template:
+    metadata:
+      labels:
+        app: duckdb-ui
+    spec:
+      containers:
+      - name: duckdb-ui-container
+        image: duckdb/duckdb
+        command: [ "/bin/sh", "-c" ]
+        args:
+            - |
+              # 1. Start DuckDB UI server (use & to background it)
+              duckdb -ui &
+
+              # 2. Keep the container process running indefinitely
+              echo "DuckDB UI server started. Keeping container alive..."
+              trap : TERM INT
+              tail -f /dev/null & wait
+        ports:
+        - name: http-port
+          containerPort: 4213
